@@ -1,0 +1,25 @@
+﻿@model OverrideCustomPage.Models.EditRdoModel
+
+@{
+    ViewBag.Title = @OverrideCustomPage.Helpers.Constants.ViewHeaderText.EditRdo;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container-fluid">
+        <div class="form-group row"></div>
+        <div class="row">
+            <h3 style="margin-left: 20px">@OverrideCustomPage.Helpers.Constants.ViewHeaderText.EditRdo</h3>
+        </div>
+        <div class="form-group row"></div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.RdoArtifactId)
+        @Html.Partial("BaseRdo", Model)
+        <div class="form-group row">
+            <div class="col-6">
+                <input type="submit" value="Save" class="btn" />
+            </div>
+        </div>
+    </div>
+}
