@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Agents.Tests.Integration
+namespace Agents.Tests.Integration.Utility
 {
 	public class UserUtility
 	{

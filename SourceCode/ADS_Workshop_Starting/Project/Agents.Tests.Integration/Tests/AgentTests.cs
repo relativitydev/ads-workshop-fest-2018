@@ -1,4 +1,5 @@
-﻿using kCura.Relativity.Client;
+﻿using Agents.Tests.Integration.Utility;
+using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using NUnit.Framework;
 using Relativity.API;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UsernamePasswordCredentials = Relativity.Services.ServiceProxy.UsernamePasswordCredentials;
 
-namespace Agents.Tests.Integration
+namespace Agents.Tests.Integration.Tests
 {
 	[TestFixture]
 	[Description("Fixture description here")]

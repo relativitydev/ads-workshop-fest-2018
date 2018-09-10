@@ -1,11 +1,10 @@
 ﻿using Relativity.Services.Agent;
 using System;
 
-namespace Agents.Tests.Integration
+namespace Agents.Tests.Integration.Utility
 {
 	public class TestConstants
 	{
-		//todo: move InstanceDetails to app.config
 		public class InstanceDetails
 		{
 			public const string INSTANCE_NAME = "192.168.137.95";
