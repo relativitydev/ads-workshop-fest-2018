@@ -60,8 +60,8 @@ namespace Agents.Tests.Integration.Tests
 		}
 
 		[Test]
-		[Description("Job Runs Successfully")]
-		public void JobRunsSuccessfully()
+		[Description("Job_ShouldBePickedUp_WhenStatusIsSetToNew_And_RunSuccessfully")]
+		public void Job_ShouldBePickedUp_WhenStatusIsSetToNew_And_RunSuccessfully()
 		{
 			int? testWorkspaceArtifactId = null;
 			int? testUserArtifactId = null;
@@ -99,7 +99,7 @@ namespace Agents.Tests.Integration.Tests
 				Console.WriteLine("Start - ACT");
 
 				//Create job
-				jobArtifactId = CreateJob();
+				jobArtifactId = CreateJob(jobStatus: Helpers.Constants.JobStatus.NEW);
 				Console.WriteLine($"{nameof(jobArtifactId)}= {jobArtifactId}");
 
 				//Check if job has run
@@ -147,6 +147,62 @@ namespace Agents.Tests.Integration.Tests
 				DeleteWorkspace(testWorkspaceArtifactId);
 				DeleteUser(testUserArtifactId);
 				DeleteGroup(testGroupArtifactId);
+				DeleteJob(jobArtifactId);
+			}
+		}
+
+		[Test]
+		[Description("Job_ShouldNotBePickedUp_WhenStatusIsNotSetToNew")]
+		public void Job_ShouldNotBePickedUp_WhenStatusIsNotSetToNew()
+		{
+			int? jobArtifactId = null;
+
+			try
+			{
+				// ARRANGE
+				Console.WriteLine("Start - ARRANGE");
+				Console.WriteLine("End - ARRANGE");
+
+				// ACT
+				Console.WriteLine("Start - ACT");
+
+				//Create job
+				jobArtifactId = CreateJob(jobStatus: string.Empty);
+				Console.WriteLine($"{nameof(jobArtifactId)}= {jobArtifactId}");
+
+				//Check if job has run
+				string jobStatus = string.Empty;
+				const int timeOutPeriod = 60; // 1 min
+				int currentWaitTime = 0; // 0 secs
+				int attempt = 1;
+				while (currentWaitTime <= timeOutPeriod)
+				{
+					Console.WriteLine($"{nameof(attempt)}= {attempt}");
+
+					//Check job status
+					jobStatus = RetrieveJobStatus(jobArtifactId.Value);
+					Console.WriteLine($"{nameof(jobStatus)}= {jobStatus}");
+
+					if (jobStatus.Equals(Helpers.Constants.JobStatus.COMPLETED))
+					{
+						break;
+					}
+
+					Thread.Sleep(5000); // 5 secs
+					currentWaitTime += 30;
+					attempt++;
+				}
+
+				Console.WriteLine("End - ACT");
+
+				// ASSERT
+				Console.WriteLine("Start - ASSERT");
+				Assert.That(jobStatus, Is.EqualTo(string.Empty));
+				Console.WriteLine("End - ASSERT");
+			}
+			finally
+			{
+				//Clean up
 				DeleteJob(jobArtifactId);
 			}
 		}
@@ -435,7 +491,7 @@ namespace Agents.Tests.Integration.Tests
 			Console.WriteLine("End - Deleting Group.");
 		}
 
-		private int CreateJob()
+		private int CreateJob(string jobStatus)
 		{
 			Console.WriteLine("Start - Creating Job.");
 
@@ -445,7 +501,6 @@ namespace Agents.Tests.Integration.Tests
 				{
 					rsapiClient.APIOptions.WorkspaceID = _workspaceArtifactId;
 					string jobName = $"Job_{Guid.NewGuid()}";
-					string jobStatus = Helpers.Constants.JobStatus.NEW;
 					MultiChoiceFieldValueList multiChoices = new MultiChoiceFieldValueList(
 						new kCura.Relativity.Client.DTOs.Choice(Helpers.Constants.Guids.Choices.InstanceMetricsJob.Metrics_Workspaces),
 						new kCura.Relativity.Client.DTOs.Choice(Helpers.Constants.Guids.Choices.InstanceMetricsJob.Metrics_Users),
