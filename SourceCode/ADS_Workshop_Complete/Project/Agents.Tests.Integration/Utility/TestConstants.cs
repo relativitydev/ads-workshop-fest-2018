@@ -27,5 +27,7 @@ namespace Agents.Tests.Integration.Utility
 		public const int AGENT_INTERVAL = 10;
 		public const Agent.LoggingLevelEnum AGENT_LOGGING_LEVEL = Agent.LoggingLevelEnum.All;
 		public const int WORKSPACE_CREATION_RETRY = 3;
+		public static readonly string ApplicationRapFilePath = @"S:\SourceCode\GitHub\ads-workshop-fest-2018\SourceCode\ADS_Workshop_Complete\RAP\ADS_Workshop_Fest_2018.rap";
+		public static readonly string WorkspaceName = "ADS" + "-" + Guid.NewGuid();
 	}
 }

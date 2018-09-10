@@ -22,8 +22,6 @@ namespace Agents.Tests.Integration.Tests
 		private IDBContext _eddsDbContext;
 		private AgentUtility _agentUtility;
 		private TestHelper _testHelper;
-		private readonly string _applicationRapFilePath = @"S:\SourceCode\GitHub\ads-workshop-fest-2018\SourceCode\ADS_Workshop_Starting\RAP\ADS_Workshop_Fest_2018.rap";
-		private readonly string _workspaceName = "ADS" + "-" + Guid.NewGuid();
 		private int _workspaceArtifactId;
 
 		[OneTimeSetUp]
@@ -38,7 +36,7 @@ namespace Agents.Tests.Integration.Tests
 			SetupApiEndpoints();
 
 			//Create Workspace
-			_workspaceArtifactId = CreateWorkspace(_workspaceName);
+			_workspaceArtifactId = CreateWorkspace(TestConstants.WorkspaceName);
 
 			//Install Application      
 			InstallApplicationInWorkspace();
@@ -240,7 +238,7 @@ namespace Agents.Tests.Integration.Tests
 				client: _rsapiClient,
 				workspaceId: _workspaceArtifactId,
 				forceFlag: true,
-				filePath: _applicationRapFilePath,
+				filePath: TestConstants.ApplicationRapFilePath,
 				applicationName: Helpers.Constants.Names.APPLICATION);
 
 			Console.WriteLine("End - Install Application in Workspace.");
