@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ConfigurationFile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <custompages />
+  <resourceFilesList />
+  <name>FestConfig</name>
+  <destinationPath>C:\</destinationPath>
+  <webURLServer>http://devvmbase3/Relativity.Services</webURLServer>
+  <dbCaseServer>DEVVMBASE3</dbCaseServer>
+  <dbCaseUserName>eddsdbo</dbCaseUserName>
+  <dbCaseUserPassword>mJ00pLuKJ3YQM7adAla/HA==</dbCaseUserPassword>
+  <caseUserName>relativity.admin@kcura.com</caseUserName>
+  <applicationSchema />
+  <applicationVersion>...</applicationVersion>
+  <applicationGuid>ca81e1fe-1061-4d29-b0c9-d0396ffa6348</applicationGuid>
+  <caseGuid>d40fa95a-15e3-4a57-ad29-ba9b98661d53</caseGuid>
+</ConfigurationFile>
