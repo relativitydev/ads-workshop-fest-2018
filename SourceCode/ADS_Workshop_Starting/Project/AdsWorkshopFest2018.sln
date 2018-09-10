@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlers", "EventHandl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{9FB80085-B474-453D-B83D-B68222A601E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agents.Tests.Integration", "Agents.Tests.Integration\Agents.Tests.Integration.csproj", "{CC804201-4EAB-47D7-BA2C-FA0528BB1BF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9FB80085-B474-453D-B83D-B68222A601E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FB80085-B474-453D-B83D-B68222A601E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FB80085-B474-453D-B83D-B68222A601E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC804201-4EAB-47D7-BA2C-FA0528BB1BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC804201-4EAB-47D7-BA2C-FA0528BB1BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC804201-4EAB-47D7-BA2C-FA0528BB1BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC804201-4EAB-47D7-BA2C-FA0528BB1BF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

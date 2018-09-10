@@ -7,6 +7,7 @@ namespace Helpers
 		public class Guids
 		{
 			public static readonly Guid Application = new Guid("5BFE392E-2D1A-4023-BE44-4098C48E6976");
+			public static readonly Guid AgentInstanceMetricsCalculator = new Guid("20530D16-D825-4FA5-9A7E-6760579EB07B");
 
 			public class ObjectType
 			{
@@ -45,9 +46,6 @@ namespace Helpers
 			public const string APPLICATION = "ADS Workshop Fest 2018";
 		}
 
-		public class AgentNames
-		{
-		}
 		public class JobStatus
 		{
 			public const string NEW = "New";
