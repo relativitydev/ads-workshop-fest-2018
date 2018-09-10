@@ -7,12 +7,12 @@ properties {
     $build_artifacts = Join-Path $root "Artifacts"
     $test_logs = Join-Path $build_artifacts "TestLogs"
     $build_logs = Join-Path $build_artifacts "BuildLogs"
-    $solution = Join-Path $root "..\RelativityAgent1\RelativityAgent.sln"
+    $solution = Join-Path $root "..\AdsWorkshopFest2018.sln"
 	# MSBUILD VS 2017 - 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe'
 	# MSBUILD VS2015 - C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe
 	#$msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"
 	$msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe"
-	$testAssembly =  $testAssembly = Join-Path $root "..\RelativityAgent1\AgentNunitIntegrationTest\bin\Debug\AgentNunitIntegrationTest.dll"
+	$testAssembly =  $testAssembly = Join-Path $root "..\Project\Agents.Tests.Integration\bin\Debug\Agents.Tests.Integration.dll"
 }
 
 task default -Depends LocalBuild
@@ -61,17 +61,17 @@ task Compile -Depends CompileInitialize, NuGetRestore -Description "Compile the 
     } -errorMessage "If Compile fails, check the registry HKEY_LOCAL_MACHINE -> SOFTWARE -->Microsoft --> MSBuild -->ToolsVersions -- > 14  --> MSBuildToolsPath and make sure it is set to the Visual Studio 2017 executable. MSBuildToolsPath(VS2017) should be at C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\"
 }
 
-task UnitTest -Alias Test -Depends TestInitialize -Description "Run NUnit unit tests" {
-    exec { & $nunit_exe $solution --where "class=~/^.+\.UnitTests\..+$/" --result="$test_logs\UnitTests.xml;format=nunit2" } -errorMessage "Unit tests failed!"
-}
+#task UnitTest -Alias Test -Depends TestInitialize -Description "Run NUnit unit tests" {
+#    exec { & $nunit_exe $solution --where "class=~/^.+\.UnitTests\..+$/" --result="$test_logs\UnitTests.xml;format=nunit2" } -errorMessage "Unit tests failed!"
+#}
 
 task IntegrationTest -Depends TestInitialize -Description "Run NUnit integration unit tests. " {
-	#$testDir = Join-Path $root "..\RelativityAgent1\AgentNunitIntegrationTest"
-   # $configSource = "..\RelativityAgent1\AgentNunitIntegrationTest\app.config"
-    #Write-Host "configSource is : $configSource"
-    #$configDestination = Join-Path $root "..\RelativityAgent1\AgentNunitIntegrationTest\bin\Debug\AgentNunitIntegrationTest.dll.config"
+	$testDir = Join-Path $root "..\Agents.Tests.Integration"
+    $configSource = "..\Project\Agents.Tests.Integration\App.config"
+    Write-Host "configSource is : $configSource"
+    $configDestination = Join-Path $root "..\Project\Agents.Tests.Integration\bin\Debug\Agents.Tests.Integration.dll.config"
     Write-Host "Test assembly : $testAssembly"
-    #Copy-Item $configSource $configDestination -Verbose:$VerbosePreference
+    Copy-Item $configSource $configDestination -Verbose:$VerbosePreference
     exec { & $nunit_exe $testAssembly --result="$test_logs\IntegrationTest.xml;format=nunit2" } -errorMessage "Integration tests failed!"
 }
 	
