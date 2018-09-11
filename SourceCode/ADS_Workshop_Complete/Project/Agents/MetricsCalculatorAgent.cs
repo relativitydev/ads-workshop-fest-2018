@@ -16,6 +16,7 @@ namespace Agents
 		private IAPILog _logger;
 
 		public override string Name => Constants.Names.AGENT_INSTANCE_METRICS_CALCULATOR;
+		private readonly ApiChooser _apiChooser = new ApiChooser(Constants.ApiType.Rsapi);
 
 		public override void Execute()
 		{
@@ -60,7 +61,7 @@ namespace Agents
 			{
 				RaiseMessage($"Processing Workspace({workspaceArtifactId})", 10);
 				RaiseMessage("Querying for jobs in the workspace", 10);
-				List<int> newJobArtifactIds = RsapiHelper.RetrieveJobsInWorkspaceWithStatus(servicesMgr, workspaceArtifactId, Constants.JobStatus.NEW);
+				List<int> newJobArtifactIds = _apiChooser.RetrieveJobsInWorkspaceWithStatus(servicesMgr, workspaceArtifactId, Constants.JobStatus.NEW);
 				foreach (int newJobArtifactId in newJobArtifactIds)
 				{
 					RaiseMessage($"Processing job({newJobArtifactId}) in the workspace({workspaceArtifactId})", 10);
@@ -80,23 +81,23 @@ namespace Agents
 			try
 			{
 				//Update job status to In Progress
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.IN_PROGRESS);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.IN_PROGRESS);
 
 				//Update job metrics
-				RDO jobRdo = RsapiHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
+				RDO jobRdo = _apiChooser.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
 				RaiseMessage("Calculating metrics for the job", 10);
 				ProcessAllMetrics(servicesMgr, workspaceArtifactId, jobArtifactId, jobRdo);
 				RaiseMessage("Calculated metrics for the job", 10);
 
 				//Update job status to Completed
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.COMPLETED);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.COMPLETED);
 			}
 			catch (Exception ex)
 			{
 				//Update job status to Error
 				string errorMessage = ExceptionMessageFormatter.GetInnerMostExceptionMessage(ex);
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.COMPLETED);
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Errors_LongText, errorMessage);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.COMPLETED);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Errors_LongText, errorMessage);
 			}
 		}
 
@@ -126,7 +127,7 @@ namespace Agents
 				List<Guid> choiceGuids = new List<Guid>();
 				foreach (int choiceArtifactId in choiceArtifactIds)
 				{
-					Choice choice = RsapiHelper.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
+					Choice choice = _apiChooser.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
 					Guid choiceGuid = choice.Guids.FirstOrDefault();
 					choiceGuids.Add(choiceGuid);
 				}
@@ -170,8 +171,8 @@ namespace Agents
 			try
 			{
 				RaiseMessage("Processing workspaces metric", 10);
-				int noOfWorkspaces = RsapiHelper.QueryNumberOfWorkspaces(servicesMgr);
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.WorkspacesCount_LongText, noOfWorkspaces);
+				int noOfWorkspaces = _apiChooser.QueryNumberOfWorkspaces(servicesMgr);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.WorkspacesCount_LongText, noOfWorkspaces);
 			}
 			catch (Exception ex)
 			{
@@ -184,8 +185,8 @@ namespace Agents
 			try
 			{
 				RaiseMessage("Processing users metric", 10);
-				int noOfUsers = RsapiHelper.QueryNumberOfUsers(servicesMgr);
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.UsersCount_LongText, noOfUsers);
+				int noOfUsers = _apiChooser.QueryNumberOfUsers(servicesMgr);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.UsersCount_LongText, noOfUsers);
 			}
 			catch (Exception ex)
 			{
@@ -198,8 +199,8 @@ namespace Agents
 			try
 			{
 				RaiseMessage("Processing groups metric", 10);
-				int noOfGroups = RsapiHelper.QueryNumberOfGroups(servicesMgr);
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.GroupsCount_LongText, noOfGroups);
+				int noOfGroups = _apiChooser.QueryNumberOfGroups(servicesMgr);
+				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.GroupsCount_LongText, noOfGroups);
 			}
 			catch (Exception ex)
 			{

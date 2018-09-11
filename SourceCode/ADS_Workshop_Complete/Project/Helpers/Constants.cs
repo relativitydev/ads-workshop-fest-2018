@@ -73,6 +73,13 @@ namespace Helpers
 			public const string PROCESS_USERS_METRIC_ERROR = "An error occured when processing users metric";
 			public const string PROCESS_GROUPS_METRIC_ERROR = "An error occured when processing groups metric";
 			public const string CHOICE_ARTIFACT_ID_TO_GUID_CONVERSION_ERROR = "An error occured when Choice ArtifactIds to Guids";
+			public const string INVALID_API_TYPE_ERROR = "Invalid ApiType encountered";
+		}
+
+		public enum ApiType
+		{
+			Rsapi,
+			Gravity
 		}
 	}
 }

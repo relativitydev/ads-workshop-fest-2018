@@ -47,8 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiChooser.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ExceptionMessageFormatter.cs" />
+    <Compile Include="GravityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RsapiHelper.cs" />
     <Compile Include="SqlHelper.cs" />
