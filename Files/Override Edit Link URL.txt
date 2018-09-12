@@ -1,0 +1,1 @@
+%applicationPath%/External.aspx?%AppID%&DirectTo=%25applicationPath%25%2fCustomPages%2f21D274EA-F22D-428D-A1CE-959F3CBDD6DC%2fHome%2fEditRdo%3f%AppID%%26%artifactid%
