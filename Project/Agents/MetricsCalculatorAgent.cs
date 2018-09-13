@@ -1,11 +1,14 @@
 ﻿using Helpers;
+using Helpers.DTOs;
 using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using Constants = Helpers.Constants;
+using Gravity.Extensions;
 
 namespace Agents
 {
@@ -16,7 +19,8 @@ namespace Agents
 		private IAPILog _logger;
 
 		public override string Name => Constants.Names.AGENT_INSTANCE_METRICS_CALCULATOR;
-		private readonly ApiChooser _apiChooser = new ApiChooser(Constants.ApiType.Rsapi);
+		private static readonly Constants.ApiType selectedApiType = Constants.ApiType.Gravity;
+		private readonly ApiChooser _apiChooser = new ApiChooser(selectedApiType);
 
 		public override void Execute()
 		{
@@ -84,10 +88,20 @@ namespace Agents
 				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.IN_PROGRESS);
 
 				//Update job metrics
-				RDO jobRdo = _apiChooser.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
-				RaiseMessage("Calculating metrics for the job", 10);
-				ProcessAllMetrics(servicesMgr, workspaceArtifactId, jobArtifactId, jobRdo);
-				RaiseMessage("Calculated metrics for the job", 10);
+				if(selectedApiType == Helpers.Constants.ApiType.Rsapi)
+				{
+					RDO jobRdo = _apiChooser.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
+					RaiseMessage("Calculating metrics for the job", 10);
+					ProcessAllMetrics(servicesMgr, workspaceArtifactId, jobArtifactId, jobRdo);
+					RaiseMessage("Calculated metrics for the job", 10);
+				}
+				else if(selectedApiType == Helpers.Constants.ApiType.Gravity)
+				{
+					InstanceMetricsJobObj jobRdo = _apiChooser.RetrieveJobWithGravity(servicesMgr, workspaceArtifactId, jobArtifactId);
+					RaiseMessage("Calculating metrics for the job", 10);
+					ProcessAllMetrics(servicesMgr, workspaceArtifactId, jobArtifactId, jobRdo);
+					RaiseMessage("Calculated metrics for the job", 10);
+				}
 
 				//Update job status to Completed
 				_apiChooser.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, Constants.Guids.Fields.InstanceMetricsJob.Status_LongText, Constants.JobStatus.COMPLETED);
@@ -111,6 +125,23 @@ namespace Agents
 
 				foreach (Guid metricGuid in metricGuidsToCollect)
 				{
+					ProcessSingleMetric(servicesMgr, workspaceArtifactId, jobArtifactId, metricGuid);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(Constants.ErrorMessages.PROCESS_ALL_JOB_METRICS_ERROR, ex);
+			}
+		}
+
+		private void ProcessAllMetrics(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId, InstanceMetricsJobObj jobRdo)
+		{
+			try
+			{
+				foreach (MetricsChoices metric in jobRdo.Metrics)
+				{
+					Guid metricGuid = metric.GetRelativityObjectAttributeGuidValue();
+
 					ProcessSingleMetric(servicesMgr, workspaceArtifactId, jobArtifactId, metricGuid);
 				}
 			}

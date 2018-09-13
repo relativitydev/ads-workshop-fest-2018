@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gravity, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Files\Gravity\Gravity.dll</HintPath>
+    </Reference>
     <Reference Include="kCura.Relativity.Client, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Rsapi.9.6.134.78\lib\kCura.Relativity.Client.dll</HintPath>
     </Reference>
@@ -49,6 +53,8 @@
   <ItemGroup>
     <Compile Include="ApiChooser.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DTOs\InstanceMetricsJobObj.cs" />
+    <Compile Include="DTOs\MetricsChoices.cs" />
     <Compile Include="ExceptionMessageFormatter.cs" />
     <Compile Include="GravityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

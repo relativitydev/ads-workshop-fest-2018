@@ -1,7 +1,11 @@
-﻿using kCura.Relativity.Client.DTOs;
+﻿using Gravity.DAL.RSAPI;
+using Helpers.DTOs;
+using kCura.Relativity.Client;
 using Relativity.API;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Helpers
 {
@@ -9,43 +13,30 @@ namespace Helpers
 	{
 		public static List<int> RetrieveJobsInWorkspaceWithStatus(IServicesMgr servicesMgr, int workspaceArtifactId, string status)
 		{
-			List<int> jobsList = new List<int>();
+			RsapiDao rsapiDao = new RsapiDao(servicesMgr, workspaceArtifactId, ExecutionIdentity.System);
+			
+			Guid fieldGuid = typeof(InstanceMetricsJobObj).GetProperty(nameof(InstanceMetricsJobObj.Status)).GetCustomAttribute<RelativityObjectFieldAttribute>().FieldGuid;
+
+			Condition condition = new TextCondition(fieldGuid, TextConditionEnum.EqualTo, status);
+
+			List<int> jobsList = rsapiDao.Query<InstanceMetricsJobObj>(condition, Gravity.Base.ObjectFieldsDepthLevel.FirstLevelOnly).Select(x => x.ArtifactId).ToList();
+
 			return jobsList;
 		}
 
-		public static RDO RetrieveJob(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
+		public static InstanceMetricsJobObj RetrieveJob(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
 		{
-			RDO jobRdo = new RDO(123);
+			RsapiDao rsapiDao = new RsapiDao(servicesMgr, workspaceArtifactId, ExecutionIdentity.System);
+			InstanceMetricsJobObj jobRdo = new InstanceMetricsJobObj();
+
+			jobRdo = rsapiDao.Get<InstanceMetricsJobObj>(jobArtifactId, Gravity.Base.ObjectFieldsDepthLevel.OnlyParentObject);
 			return jobRdo;
 		}
 
 		public static void UpdateJobField(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId, Guid fieldGuid, object fieldValue)
 		{
-
-		}
-
-		public static Choice RetrieveMetricChoice(IServicesMgr servicesMgr, int workspaceArtifactId, int choiceArtifactId)
-		{
-			Choice metricChoice = new Choice();
-			return metricChoice;
-		}
-
-		public static int QueryNumberOfWorkspaces(IServicesMgr servicesMgr)
-		{
-			int numberOfWorkspaces = -1;
-			return numberOfWorkspaces;
-		}
-
-		public static int QueryNumberOfUsers(IServicesMgr servicesMgr)
-		{
-			int numberOfUsers = -1;
-			return numberOfUsers;
-		}
-
-		public static int QueryNumberOfGroups(IServicesMgr servicesMgr)
-		{
-			int numberOfGroups = -1;
-			return numberOfGroups;
+			RsapiDao rsapiDao = new RsapiDao(servicesMgr, workspaceArtifactId, ExecutionIdentity.System);
+			rsapiDao.UpdateField<InstanceMetricsJobObj>(jobArtifactId, fieldGuid, fieldValue);
 		}
 	}
 }

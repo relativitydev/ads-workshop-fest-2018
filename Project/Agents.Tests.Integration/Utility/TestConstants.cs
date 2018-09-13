@@ -7,12 +7,12 @@ namespace Agents.Tests.Integration.Utility
 	{
 		public class InstanceDetails
 		{
-			public const string INSTANCE_NAME = "192.168.137.95";
+			public const string INSTANCE_NAME = "192.168.1.197";
 			public const string PROTOCOL = "http";
 			public const string RELATIVITY_ADMIN_USERNAME = "relativity.admin@relativity.com";
 			public const string RELATIVITY_ADMIN_PASSWORD = "Test1234!";
-			public const string TEST_WORKSPACE_TEMPLATE_NAME = "Relativity Starter Template";
-			public const string SQL_SERVER_NAME = "192.168.137.95";
+			public const string TEST_WORKSPACE_TEMPLATE_NAME = "Sample Workspace";
+			public const string SQL_SERVER_NAME = "192.168.1.197";
 			public const string SQL_DATABASE_NAME = "EDDS";
 			public const string SQL_USERNAME = "eddsdbo";
 			public const string SQL_PASSWORD = "Test1234!";

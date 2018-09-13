@@ -1,4 +1,5 @@
-﻿using kCura.Relativity.Client.DTOs;
+﻿using Helpers.DTOs;
+using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ namespace Helpers
 	public class ApiChooser
 	{
 		private readonly Constants.ApiType _apiType;
+
 
 		public ApiChooser(Constants.ApiType apiType)
 		{
@@ -36,20 +38,18 @@ namespace Helpers
 
 		public RDO RetrieveJob(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
 		{
-			RDO jobRdo;
+			RDO jobRdo = null;
+			
+			jobRdo = RsapiHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
 
-			if (_apiType.Equals(Constants.ApiType.Rsapi))
-			{
-				jobRdo = RsapiHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
-			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				jobRdo = GravityHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
-			}
-			else
-			{
-				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
-			}
+			return jobRdo;
+		}
+
+		public InstanceMetricsJobObj RetrieveJobWithGravity(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
+		{
+			InstanceMetricsJobObj jobRdo = null;
+			
+			jobRdo = GravityHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
 
 			return jobRdo;
 		}
@@ -72,40 +72,18 @@ namespace Helpers
 
 		public Choice RetrieveMetricChoice(IServicesMgr servicesMgr, int workspaceArtifactId, int choiceArtifactId)
 		{
-			Choice metricChoice;
+			Choice metricChoice = null;
 
-			if (_apiType.Equals(Constants.ApiType.Rsapi))
-			{
-				metricChoice = RsapiHelper.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
-			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				metricChoice = GravityHelper.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
-			}
-			else
-			{
-				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
-			}
-
+			metricChoice = RsapiHelper.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
+			
 			return metricChoice;
 		}
 
 		public int QueryNumberOfWorkspaces(IServicesMgr servicesMgr)
 		{
 			int numberOfWorkspaces;
-
-			if (_apiType.Equals(Constants.ApiType.Rsapi))
-			{
-				numberOfWorkspaces = RsapiHelper.QueryNumberOfWorkspaces(servicesMgr);
-			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				numberOfWorkspaces = GravityHelper.QueryNumberOfWorkspaces(servicesMgr);
-			}
-			else
-			{
-				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
-			}
+			
+			numberOfWorkspaces = RsapiHelper.QueryNumberOfWorkspaces(servicesMgr);
 
 			return numberOfWorkspaces;
 		}
@@ -114,18 +92,7 @@ namespace Helpers
 		{
 			int numberOfUsers;
 
-			if (_apiType.Equals(Constants.ApiType.Rsapi))
-			{
-				numberOfUsers = RsapiHelper.QueryNumberOfUsers(servicesMgr);
-			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				numberOfUsers = GravityHelper.QueryNumberOfUsers(servicesMgr);
-			}
-			else
-			{
-				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
-			}
+			numberOfUsers = RsapiHelper.QueryNumberOfUsers(servicesMgr);
 
 			return numberOfUsers;
 		}
@@ -133,19 +100,8 @@ namespace Helpers
 		public int QueryNumberOfGroups(IServicesMgr servicesMgr)
 		{
 			int numberOfGroups;
-
-			if (_apiType.Equals(Constants.ApiType.Rsapi))
-			{
-				numberOfGroups = RsapiHelper.QueryNumberOfGroups(servicesMgr);
-			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				numberOfGroups = GravityHelper.QueryNumberOfGroups(servicesMgr);
-			}
-			else
-			{
-				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
-			}
+			
+			numberOfGroups = RsapiHelper.QueryNumberOfGroups(servicesMgr);
 
 			return numberOfGroups;
 		}

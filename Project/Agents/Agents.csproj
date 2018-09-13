@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gravity, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Files\Gravity\Gravity.dll</HintPath>
+    </Reference>
     <Reference Include="kCura.Agent, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Relativity.Agent.9.6.134.78\lib\kCura.Agent.dll</HintPath>
     </Reference>
