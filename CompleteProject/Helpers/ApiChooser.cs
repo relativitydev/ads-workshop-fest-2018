@@ -1,19 +1,25 @@
 ﻿using Helpers.DTOs;
+using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Collections.Generic;
+using Choice = kCura.Relativity.Client.DTOs.Choice;
 
 namespace Helpers
 {
 	public class ApiChooser
 	{
 		private readonly Constants.ApiType _apiType;
-
+		private readonly APIOptions _rsapiApiOptions;
 
 		public ApiChooser(Constants.ApiType apiType)
 		{
 			_apiType = apiType;
+			_rsapiApiOptions = new APIOptions
+			{
+				WorkspaceID = -1
+			};
 		}
 
 		public List<int> RetrieveJobsInWorkspaceWithStatus(IServicesMgr servicesMgr, int workspaceArtifactId, string status)
@@ -22,7 +28,15 @@ namespace Helpers
 
 			if (_apiType.Equals(Constants.ApiType.Rsapi))
 			{
-				jobsList = RsapiHelper.RetrieveJobsInWorkspaceWithStatus(servicesMgr, workspaceArtifactId, status);
+				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				{
+					RsapiHelper rsapiHelper = new RsapiHelper
+					{
+						RsapiApiOptions = _rsapiApiOptions,
+						RdoRepository = rsapiClient.Repositories.RDO
+					};
+					jobsList = rsapiHelper.RetrieveJobsInWorkspaceWithStatus(workspaceArtifactId, status);
+				}
 			}
 			else if (_apiType.Equals(Constants.ApiType.Gravity))
 			{
@@ -39,8 +53,16 @@ namespace Helpers
 		public RDO RetrieveJob(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
 		{
 			RDO jobRdo = null;
-			
-			jobRdo = RsapiHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
+
+			using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+			{
+				RsapiHelper rsapiHelper = new RsapiHelper
+				{
+					RsapiApiOptions = _rsapiApiOptions,
+					RdoRepository = rsapiClient.Repositories.RDO
+				};
+				jobRdo = rsapiHelper.RetrieveJob(workspaceArtifactId, jobArtifactId);
+			}
 
 			return jobRdo;
 		}
@@ -48,7 +70,7 @@ namespace Helpers
 		public InstanceMetricsJobObj RetrieveJobWithGravity(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
 		{
 			InstanceMetricsJobObj jobRdo = null;
-			
+
 			jobRdo = GravityHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
 
 			return jobRdo;
@@ -58,7 +80,15 @@ namespace Helpers
 		{
 			if (_apiType.Equals(Constants.ApiType.Rsapi))
 			{
-				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, fieldGuid, fieldValue);
+				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				{
+					RsapiHelper rsapiHelper = new RsapiHelper
+					{
+						RsapiApiOptions = _rsapiApiOptions,
+						RdoRepository = rsapiClient.Repositories.RDO
+					};
+					rsapiHelper.UpdateJobField(workspaceArtifactId, jobArtifactId, fieldGuid, fieldValue);
+				}
 			}
 			else if (_apiType.Equals(Constants.ApiType.Gravity))
 			{
@@ -74,16 +104,32 @@ namespace Helpers
 		{
 			Choice metricChoice = null;
 
-			metricChoice = RsapiHelper.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
-			
+			using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+			{
+				RsapiHelper rsapiHelper = new RsapiHelper
+				{
+					RsapiApiOptions = _rsapiApiOptions,
+					ChoiceRepository = rsapiClient.Repositories.Choice
+				};
+				metricChoice = rsapiHelper.RetrieveMetricChoice(workspaceArtifactId, choiceArtifactId);
+			}
+
 			return metricChoice;
 		}
 
 		public int QueryNumberOfWorkspaces(IServicesMgr servicesMgr)
 		{
 			int numberOfWorkspaces;
-			
-			numberOfWorkspaces = RsapiHelper.QueryNumberOfWorkspaces(servicesMgr);
+
+			using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+			{
+				RsapiHelper rsapiHelper = new RsapiHelper
+				{
+					RsapiApiOptions = _rsapiApiOptions,
+					WorkspaceRepository = rsapiClient.Repositories.Workspace
+				};
+				numberOfWorkspaces = rsapiHelper.QueryNumberOfWorkspaces();
+			}
 
 			return numberOfWorkspaces;
 		}
@@ -92,7 +138,15 @@ namespace Helpers
 		{
 			int numberOfUsers;
 
-			numberOfUsers = RsapiHelper.QueryNumberOfUsers(servicesMgr);
+			using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+			{
+				RsapiHelper rsapiHelper = new RsapiHelper
+				{
+					RsapiApiOptions = _rsapiApiOptions,
+					UserRepository = rsapiClient.Repositories.User
+				};
+				numberOfUsers = rsapiHelper.QueryNumberOfUsers();
+			}
 
 			return numberOfUsers;
 		}
@@ -100,8 +154,16 @@ namespace Helpers
 		public int QueryNumberOfGroups(IServicesMgr servicesMgr)
 		{
 			int numberOfGroups;
-			
-			numberOfGroups = RsapiHelper.QueryNumberOfGroups(servicesMgr);
+
+			using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+			{
+				RsapiHelper rsapiHelper = new RsapiHelper
+				{
+					RsapiApiOptions = _rsapiApiOptions,
+					GroupRepository = rsapiClient.Repositories.Group
+				};
+				numberOfGroups = rsapiHelper.QueryNumberOfGroups();
+			}
 
 			return numberOfGroups;
 		}

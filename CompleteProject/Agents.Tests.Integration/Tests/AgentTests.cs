@@ -13,12 +13,14 @@ using UsernamePasswordCredentials = Relativity.Services.ServiceProxy.UsernamePas
 namespace Agents.Tests.Integration.Tests
 {
 	[TestFixture]
-	[Description("Fixture description here")]
+	[Description("Agent Tests")]
 	public class AgentTests
 	{
 		private ServiceFactory _serviceFactory;
 		private IServicesMgr _servicesManager;
 		private IRSAPIClient _rsapiClient;
+		private APIOptions _rsapiApiOptions;
+		private Helpers.RsapiHelper _rsapiHelper;
 		private IDBContext _eddsDbContext;
 		private AgentUtility _agentUtility;
 		private TestHelper _testHelper;
@@ -72,11 +74,11 @@ namespace Agents.Tests.Integration.Tests
 				Console.WriteLine("Start - ARRANGE");
 
 				//Get metrics before the job is run
-				int numberOfWorkspacesBeforeJobRun = Helpers.RsapiHelper.QueryNumberOfWorkspaces(_servicesManager);
+				int numberOfWorkspacesBeforeJobRun = _rsapiHelper.QueryNumberOfWorkspaces();
 				Console.WriteLine($"{nameof(numberOfWorkspacesBeforeJobRun)}= {numberOfWorkspacesBeforeJobRun}");
-				int numberOfUsersBeforeJobRun = Helpers.RsapiHelper.QueryNumberOfUsers(_servicesManager);
+				int numberOfUsersBeforeJobRun = _rsapiHelper.QueryNumberOfUsers();
 				Console.WriteLine($"{nameof(numberOfUsersBeforeJobRun)}= {numberOfUsersBeforeJobRun}");
-				int numberOfGroupsBeforeJobRun = Helpers.RsapiHelper.QueryNumberOfGroups(_servicesManager);
+				int numberOfGroupsBeforeJobRun = _rsapiHelper.QueryNumberOfGroups();
 				Console.WriteLine($"{nameof(numberOfGroupsBeforeJobRun)}= {numberOfGroupsBeforeJobRun}");
 
 				//Create Test Workspace
@@ -122,11 +124,11 @@ namespace Agents.Tests.Integration.Tests
 					currentWaitTime += 30;
 					attempt++;
 				}
-				int numberOfWorkspacesAfterJobRun = Helpers.RsapiHelper.QueryNumberOfWorkspaces(_servicesManager);
+				int numberOfWorkspacesAfterJobRun = _rsapiHelper.QueryNumberOfWorkspaces();
 				Console.WriteLine($"{nameof(numberOfWorkspacesAfterJobRun)}= {numberOfWorkspacesAfterJobRun}");
-				int numberOfUsersAfterJobRun = Helpers.RsapiHelper.QueryNumberOfUsers(_servicesManager);
+				int numberOfUsersAfterJobRun = _rsapiHelper.QueryNumberOfUsers();
 				Console.WriteLine($"{nameof(numberOfUsersAfterJobRun)}= {numberOfUsersAfterJobRun}");
-				int numberOfGroupsAfterJobRun = Helpers.RsapiHelper.QueryNumberOfGroups(_servicesManager);
+				int numberOfGroupsAfterJobRun = _rsapiHelper.QueryNumberOfGroups();
 				Console.WriteLine($"{nameof(numberOfGroupsAfterJobRun)}= {numberOfGroupsAfterJobRun}");
 
 				Console.WriteLine("End - ACT");
@@ -226,6 +228,19 @@ namespace Agents.Tests.Integration.Tests
 			_serviceFactory = new ServiceFactory(serviceFactorySettings);
 			_agentUtility = new AgentUtility(_eddsDbContext, _serviceFactory);
 			_rsapiClient = _serviceFactory.CreateProxy<IRSAPIClient>();
+			_rsapiApiOptions = new APIOptions
+			{
+				WorkspaceID = -1
+			};
+			_rsapiHelper = new Helpers.RsapiHelper
+			{
+				RsapiApiOptions = _rsapiApiOptions,
+				RdoRepository = _rsapiClient.Repositories.RDO,
+				ChoiceRepository = _rsapiClient.Repositories.Choice,
+				WorkspaceRepository = _rsapiClient.Repositories.Workspace,
+				UserRepository = _rsapiClient.Repositories.User,
+				GroupRepository = _rsapiClient.Repositories.Group
+			};
 
 			Console.WriteLine("End - Setup API Endpoints.");
 		}

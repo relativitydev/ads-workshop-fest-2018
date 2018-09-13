@@ -1,16 +1,24 @@
 ﻿using kCura.Relativity.Client;
 using kCura.Relativity.Client.DTOs;
-using Relativity.API;
+using kCura.Relativity.Client.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Choice = kCura.Relativity.Client.DTOs.Choice;
 using User = kCura.Relativity.Client.DTOs.User;
 
 namespace Helpers
 {
 	public class RsapiHelper
 	{
-		public static List<int> RetrieveJobsInWorkspaceWithStatus(IServicesMgr servicesMgr, int workspaceArtifactId, string status)
+		public APIOptions RsapiApiOptions { get; set; }
+		public IGenericRepository<RDO> RdoRepository { get; set; }
+		public IGenericRepository<Choice> ChoiceRepository { get; set; }
+		public IGenericRepository<Workspace> WorkspaceRepository { get; set; }
+		public IGenericRepository<User> UserRepository { get; set; }
+		public IGenericRepository<Group> GroupRepository { get; set; }
+
+		public List<int> RetrieveJobsInWorkspaceWithStatus(int workspaceArtifactId, string status)
 		{
 			List<int> jobsList = new List<int>();
 			try
@@ -23,17 +31,14 @@ namespace Helpers
 				};
 
 				QueryResultSet<RDO> rdoQueryResultSet;
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				try
 				{
-					rsapiClient.APIOptions.WorkspaceID = workspaceArtifactId;
-					try
-					{
-						rdoQueryResultSet = rsapiClient.Repositories.RDO.Query(rdoQuery);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.QUERY_APPLICATION_JOBS_ERROR}. Query. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}]", ex);
-					}
+					RsapiApiOptions.WorkspaceID = workspaceArtifactId;
+					rdoQueryResultSet = RdoRepository.Query(rdoQuery);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.QUERY_APPLICATION_JOBS_ERROR}. Query. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}]", ex);
 				}
 
 				if (!rdoQueryResultSet.Success)
@@ -50,22 +55,19 @@ namespace Helpers
 			return jobsList;
 		}
 
-		public static RDO RetrieveJob(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
+		public RDO RetrieveJob(int workspaceArtifactId, int jobArtifactId)
 		{
 			RDO jobRdo;
 			try
 			{
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				try
 				{
-					rsapiClient.APIOptions.WorkspaceID = workspaceArtifactId;
-					try
-					{
-						jobRdo = rsapiClient.Repositories.RDO.ReadSingle(jobArtifactId);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.RETRIEVE_APPLICATION_JOB_ERROR}. ReadSingle. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}, {nameof(jobArtifactId)}= {jobArtifactId}]", ex);
-					}
+					RsapiApiOptions.WorkspaceID = workspaceArtifactId;
+					jobRdo = RdoRepository.ReadSingle(jobArtifactId);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.RETRIEVE_APPLICATION_JOB_ERROR}. ReadSingle. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}, {nameof(jobArtifactId)}= {jobArtifactId}]", ex);
 				}
 			}
 			catch (Exception ex)
@@ -75,25 +77,22 @@ namespace Helpers
 			return jobRdo;
 		}
 
-		public static void UpdateJobField(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId, Guid fieldGuid, object fieldValue)
+		public void UpdateJobField(int workspaceArtifactId, int jobArtifactId, Guid fieldGuid, object fieldValue)
 		{
 			try
 			{
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
-				{
-					rsapiClient.APIOptions.WorkspaceID = workspaceArtifactId;
-					RDO jobRdo = new RDO(jobArtifactId);
-					jobRdo.ArtifactTypeGuids.Add(Constants.Guids.ObjectType.InstanceMetricsJob);
-					jobRdo.Fields.Add(new FieldValue(fieldGuid, fieldValue));
+				RDO jobRdo = new RDO(jobArtifactId);
+				jobRdo.ArtifactTypeGuids.Add(Constants.Guids.ObjectType.InstanceMetricsJob);
+				jobRdo.Fields.Add(new FieldValue(fieldGuid, fieldValue));
 
-					try
-					{
-						rsapiClient.Repositories.RDO.UpdateSingle(jobRdo);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.UPDATE_APPLICATION_JOB_STATUS_ERROR}. UpdateSingle. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}, {nameof(jobArtifactId)}= {jobArtifactId}, {nameof(fieldGuid)}= {fieldGuid}, {nameof(fieldValue)}= {fieldValue}]", ex);
-					}
+				try
+				{
+					RsapiApiOptions.WorkspaceID = workspaceArtifactId;
+					RdoRepository.UpdateSingle(jobRdo);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.UPDATE_APPLICATION_JOB_STATUS_ERROR}. UpdateSingle. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}, {nameof(jobArtifactId)}= {jobArtifactId}, {nameof(fieldGuid)}= {fieldGuid}, {nameof(fieldValue)}= {fieldValue}]", ex);
 				}
 			}
 			catch (Exception ex)
@@ -102,22 +101,19 @@ namespace Helpers
 			}
 		}
 
-		public static kCura.Relativity.Client.DTOs.Choice RetrieveMetricChoice(IServicesMgr servicesMgr, int workspaceArtifactId, int choiceArtifactId)
+		public Choice RetrieveMetricChoice(int workspaceArtifactId, int choiceArtifactId)
 		{
-			kCura.Relativity.Client.DTOs.Choice metricChoice;
+			Choice metricChoice;
 			try
 			{
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				try
 				{
-					rsapiClient.APIOptions.WorkspaceID = workspaceArtifactId;
-					try
-					{
-						metricChoice = rsapiClient.Repositories.Choice.ReadSingle(choiceArtifactId);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.RETRIEVE_METRIC_CHOICE_ERROR}. ReadSingle. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}, {nameof(choiceArtifactId)}= {choiceArtifactId}]", ex);
-					}
+					RsapiApiOptions.WorkspaceID = workspaceArtifactId;
+					metricChoice = ChoiceRepository.ReadSingle(choiceArtifactId);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.RETRIEVE_METRIC_CHOICE_ERROR}. ReadSingle. [{nameof(workspaceArtifactId)}= {workspaceArtifactId}, {nameof(choiceArtifactId)}= {choiceArtifactId}]", ex);
 				}
 			}
 			catch (Exception ex)
@@ -127,7 +123,7 @@ namespace Helpers
 			return metricChoice;
 		}
 
-		public static int QueryNumberOfWorkspaces(IServicesMgr servicesMgr)
+		public int QueryNumberOfWorkspaces()
 		{
 			int numberOfWorkspaces;
 			try
@@ -138,17 +134,14 @@ namespace Helpers
 				};
 
 				QueryResultSet<Workspace> workspaceQueryResultSet;
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				try
 				{
-					rsapiClient.APIOptions.WorkspaceID = -1;
-					try
-					{
-						workspaceQueryResultSet = rsapiClient.Repositories.Workspace.Query(workspaceQuery);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.QUERY_NUMBER_OF_WORKSPACES_ERROR}. Query.", ex);
-					}
+					RsapiApiOptions.WorkspaceID = -1;
+					workspaceQueryResultSet = WorkspaceRepository.Query(workspaceQuery);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.QUERY_NUMBER_OF_WORKSPACES_ERROR}. Query.", ex);
 				}
 
 				if (!workspaceQueryResultSet.Success)
@@ -165,7 +158,7 @@ namespace Helpers
 			return numberOfWorkspaces;
 		}
 
-		public static int QueryNumberOfUsers(IServicesMgr servicesMgr)
+		public int QueryNumberOfUsers()
 		{
 			int numberOfUsers;
 			try
@@ -176,17 +169,14 @@ namespace Helpers
 				};
 
 				QueryResultSet<User> userQueryResultSet;
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				try
 				{
-					rsapiClient.APIOptions.WorkspaceID = -1;
-					try
-					{
-						userQueryResultSet = rsapiClient.Repositories.User.Query(userQuery);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.QUERY_NUMBER_OF_USERS_ERROR}. Query.", ex);
-					}
+					RsapiApiOptions.WorkspaceID = -1;
+					userQueryResultSet = UserRepository.Query(userQuery);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.QUERY_NUMBER_OF_USERS_ERROR}. Query.", ex);
 				}
 
 				if (!userQueryResultSet.Success)
@@ -203,7 +193,7 @@ namespace Helpers
 			return numberOfUsers;
 		}
 
-		public static int QueryNumberOfGroups(IServicesMgr servicesMgr)
+		public int QueryNumberOfGroups()
 		{
 			int numberOfGroups;
 			try
@@ -214,17 +204,14 @@ namespace Helpers
 				};
 
 				QueryResultSet<Group> groupQueryResultSet;
-				using (IRSAPIClient rsapiClient = servicesMgr.CreateProxy<IRSAPIClient>(ExecutionIdentity.System))
+				try
 				{
-					rsapiClient.APIOptions.WorkspaceID = -1;
-					try
-					{
-						groupQueryResultSet = rsapiClient.Repositories.Group.Query(groupQuery);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception($"{Constants.ErrorMessages.QUERY_NUMBER_OF_GROUPS_ERROR}. Query.", ex);
-					}
+					RsapiApiOptions.WorkspaceID = -1;
+					groupQueryResultSet = GroupRepository.Query(groupQuery);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"{Constants.ErrorMessages.QUERY_NUMBER_OF_GROUPS_ERROR}. Query.", ex);
 				}
 
 				if (!groupQueryResultSet.Success)
