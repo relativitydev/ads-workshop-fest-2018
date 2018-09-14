@@ -1,0 +1,55 @@
+[Test]
+[Description("Job_ShouldNotBePickedUp_WhenStatusIsNotSetToNew")]
+public void Job_ShouldNotBePickedUp_WhenStatusIsNotSetToNew()
+{
+	int? jobArtifactId = null;
+
+	try
+	{
+		// ARRANGE
+		Console.WriteLine("Start - ARRANGE");
+		Console.WriteLine("End - ARRANGE");
+
+		// ACT
+		Console.WriteLine("Start - ACT");
+
+		//Create job
+		jobArtifactId = CreateJob(jobStatus: string.Empty);
+		Console.WriteLine($"{nameof(jobArtifactId)}= {jobArtifactId}");
+
+		//Check if job has run
+		string jobStatus = string.Empty;
+		const int timeOutPeriod = 60; // 1 min
+		int currentWaitTime = 0; // 0 secs
+		int attempt = 1;
+		while (currentWaitTime <= timeOutPeriod)
+		{
+			Console.WriteLine($"{nameof(attempt)}= {attempt}");
+
+			//Check job status
+			jobStatus = RetrieveJobStatus(jobArtifactId.Value);
+			Console.WriteLine($"{nameof(jobStatus)}= {jobStatus}");
+
+			if (jobStatus.Equals(Helpers.Constants.JobStatus.COMPLETED))
+			{
+				break;
+			}
+
+			Thread.Sleep(5000); // 5 secs
+			currentWaitTime += 30;
+			attempt++;
+		}
+
+		Console.WriteLine("End - ACT");
+
+		// ASSERT
+		Console.WriteLine("Start - ASSERT");
+		Assert.That(jobStatus, Is.EqualTo(string.Empty));
+		Console.WriteLine("End - ASSERT");
+	}
+	finally
+	{
+		//Clean up
+		DeleteJob(jobArtifactId);
+	}
+}

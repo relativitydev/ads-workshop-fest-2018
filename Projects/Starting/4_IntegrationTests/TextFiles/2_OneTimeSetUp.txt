@@ -1,0 +1,111 @@
+[OneTimeSetUp]
+public void OneTimeSetUp()
+{
+	Console.WriteLine("Start - OneTimeSetUp");
+
+	//Setup Test variables
+	SetupTestVariables();
+
+	//Setup API Endpoints
+	SetupApiEndpoints();
+
+	//Create Workspace
+	_workspaceArtifactId = CreateWorkspace(TestConstants.WorkspaceName);
+
+	//Install Application      
+	InstallApplicationInWorkspace();
+
+	//Setup Agents
+	_agentUtility.SetUpAgents();
+
+	Console.WriteLine("End - OneTimeSetUp");
+}
+
+private void SetupTestVariables()
+{
+	Console.WriteLine("Start - Setup Test Variables.");
+
+	//Setup variables
+	_testHelper = new TestHelper();
+	_servicesManager = _testHelper.GetServicesManager();
+	_eddsDbContext = _testHelper.GetDBContext(-1);
+
+	Console.WriteLine("End - Setup Test Variables.");
+}
+
+private void SetupApiEndpoints()
+{
+	Console.WriteLine("Start - Setup API Endpoints.");
+
+	UsernamePasswordCredentials usernamePasswordCredentials = new UsernamePasswordCredentials(TestConstants.InstanceDetails.RELATIVITY_ADMIN_USERNAME, TestConstants.InstanceDetails.RELATIVITY_ADMIN_PASSWORD);
+	ServiceFactorySettings serviceFactorySettings = new ServiceFactorySettings(TestConstants.InstanceDetails.RelativityServicesUri, TestConstants.InstanceDetails.RelativityRestUri, usernamePasswordCredentials);
+	_serviceFactory = new ServiceFactory(serviceFactorySettings);
+	_agentUtility = new AgentUtility(_eddsDbContext, _serviceFactory);
+	_rsapiClient = _serviceFactory.CreateProxy<IRSAPIClient>();
+
+	Console.WriteLine("End - Setup API Endpoints.");
+}
+
+private int CreateWorkspace(string workspaceName)
+{
+	Console.WriteLine("Start - Create Workspace.");
+
+	int workspaceArtifactId = -2;
+	try
+	{
+		// retry logic for workspace creation
+		int j = 1;
+
+		while (j < TestConstants.WORKSPACE_CREATION_RETRY)
+		{
+			j++;
+			try
+			{
+				Console.WriteLine("Creating workspace.");
+				workspaceArtifactId = Relativity.Test.Helpers.WorkspaceHelpers.CreateWorkspace.CreateWorkspaceAsync(
+						workspaceName: workspaceName,
+						templateName: TestConstants.InstanceDetails.TEST_WORKSPACE_TEMPLATE_NAME,
+						svcMgr: _servicesManager,
+						userName: TestConstants.InstanceDetails.RELATIVITY_ADMIN_USERNAME,
+						password: TestConstants.InstanceDetails.RELATIVITY_ADMIN_PASSWORD).Result;
+				Console.WriteLine($"Workspace created [WorkspaceArtifactId= {workspaceArtifactId}]");
+				j = 5;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Failed to create workspace, Retry now...");
+
+				if (j != 5)
+				{
+					continue;
+				}
+
+				throw new Exception($"Failed to create workspace in the setup. Reset the Client to null\nError Message:\n{e.Message}.\nInner Exception Message:\n{e.InnerException.Message}.\nStrack trace:\n{e.StackTrace}.");
+			}
+		}
+
+		return workspaceArtifactId;
+	}
+	catch (Exception ex)
+	{
+		throw new Exception("An error occured while creating a new Workspace.", ex);
+	}
+	finally
+	{
+		Console.WriteLine("End - Create Workspace.");
+	}
+}
+
+private void InstallApplicationInWorkspace()
+{
+	Console.WriteLine("Start - Install Application in Workspace.");
+
+	Relativity.Test.Helpers.Application.ApplicationHelpers.ImportApplication(
+		client: _rsapiClient,
+		workspaceId: _workspaceArtifactId,
+		forceFlag: true,
+		filePath: TestConstants.ApplicationRapFilePath,
+		applicationName: Helpers.Constants.Names.APPLICATION);
+
+	Console.WriteLine("End - Install Application in Workspace.");
+}

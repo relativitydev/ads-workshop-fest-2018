@@ -1,0 +1,73 @@
+[OneTimeTearDown]
+public void OneTimeTearDown()
+{
+	Console.WriteLine("Start - OneTimeTearDown");
+
+	//Delete Agents
+	_agentUtility.CleanUpAgents();
+
+	//Delete Workspace
+	//DeleteWorkspace(_workspaceArtifactId);
+
+	_serviceFactory = null;
+	_servicesManager = null;
+	_rsapiClient = null;
+	_eddsDbContext = null;
+	_agentUtility = null;
+	_testHelper = null;
+
+	Console.WriteLine("End - OneTimeTearDown");
+}
+
+private bool DoesWorkspaceExists(int workspaceArtifactId)
+{
+	Console.WriteLine("Start - Checking if workspace exists.");
+
+	using (IRSAPIClient rsapiClient = _serviceFactory.CreateProxy<IRSAPIClient>())
+	{
+		rsapiClient.APIOptions.WorkspaceID = -1;
+
+		try
+		{
+			rsapiClient.Repositories.Workspace.ReadSingle(workspaceArtifactId);
+			Console.WriteLine("Workspace exists.");
+			return true;
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+		finally
+		{
+			Console.WriteLine("End - Checking if workspace exists.");
+		}
+	}
+}
+
+private void DeleteWorkspace(int? workspaceArtifactId)
+{
+	Console.WriteLine("Start - Deleting workspace.");
+
+	if (workspaceArtifactId != null)
+	{
+		if (DoesWorkspaceExists(workspaceArtifactId.Value))
+		{
+			try
+			{
+				Console.WriteLine("Deleting workspace.");
+				Relativity.Test.Helpers.WorkspaceHelpers.DeleteWorkspace.DeleteTestWorkspace(
+					workspaceID: workspaceArtifactId.Value,
+					svcMgr: _servicesManager,
+					userName: TestConstants.InstanceDetails.RELATIVITY_ADMIN_USERNAME,
+					password: TestConstants.InstanceDetails.RELATIVITY_ADMIN_PASSWORD);
+				Console.WriteLine("Workspace Deleted.");
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("An error occured when deleting a workspace", ex);
+			}
+		}
+	}
+
+	Console.WriteLine("End - Deleting workspace.");
+}

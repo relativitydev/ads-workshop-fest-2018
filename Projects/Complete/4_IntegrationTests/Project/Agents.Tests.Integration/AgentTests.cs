@@ -12,7 +12,7 @@ using UsernamePasswordCredentials = Relativity.Services.ServiceProxy.UsernamePas
 namespace Agents.Tests.Integration
 {
 	[TestFixture]
-	[Description("Fixture description here")]
+	[Description("Agent Tests")]
 	public class AgentTests
 	{
 		private ServiceFactory _serviceFactory;
@@ -24,7 +24,7 @@ namespace Agents.Tests.Integration
 		private int _workspaceArtifactId;
 
 		[OneTimeSetUp]
-		public void Execute_OneTimeSetUpSetup()
+		public void OneTimeSetUp()
 		{
 			Console.WriteLine("Start - OneTimeSetUp");
 
@@ -47,13 +47,24 @@ namespace Agents.Tests.Integration
 		}
 
 		[OneTimeTearDown]
-		public void Execute_OneTimeTearDownTeardown()
+		public void OneTimeTearDown()
 		{
+			Console.WriteLine("Start - OneTimeTearDown");
+
 			//Delete Agents
 			_agentUtility.CleanUpAgents();
 
 			//Delete Workspace
 			//DeleteWorkspace(_workspaceArtifactId);
+
+			_serviceFactory = null;
+			_servicesManager = null;
+			_rsapiClient = null;
+			_eddsDbContext = null;
+			_agentUtility = null;
+			_testHelper = null;
+
+			Console.WriteLine("End - OneTimeTearDown");
 		}
 
 		[Test]
@@ -140,11 +151,15 @@ namespace Agents.Tests.Integration
 			}
 			finally
 			{
+				Console.WriteLine("Start - Clean up");
+
 				//Clean up
-				DeleteWorkspace(testWorkspaceArtifactId);
+				//DeleteWorkspace(testWorkspaceArtifactId);
 				DeleteUser(testUserArtifactId);
 				DeleteGroup(testGroupArtifactId);
 				DeleteJob(jobArtifactId);
+
+				Console.WriteLine("End - Clean up");
 			}
 		}
 
@@ -229,20 +244,6 @@ namespace Agents.Tests.Integration
 			Console.WriteLine("End - Setup API Endpoints.");
 		}
 
-		private void InstallApplicationInWorkspace()
-		{
-			Console.WriteLine("Start - Install Application in Workspace.");
-
-			Relativity.Test.Helpers.Application.ApplicationHelpers.ImportApplication(
-				client: _rsapiClient,
-				workspaceId: _workspaceArtifactId,
-				forceFlag: true,
-				filePath: TestConstants.ApplicationRapFilePath,
-				applicationName: Helpers.Constants.Names.APPLICATION);
-
-			Console.WriteLine("End - Install Application in Workspace.");
-		}
-
 		private int CreateWorkspace(string workspaceName)
 		{
 			Console.WriteLine("Start - Create Workspace.");
@@ -291,6 +292,20 @@ namespace Agents.Tests.Integration
 			{
 				Console.WriteLine("End - Create Workspace.");
 			}
+		}
+
+		private void InstallApplicationInWorkspace()
+		{
+			Console.WriteLine("Start - Install Application in Workspace.");
+
+			Relativity.Test.Helpers.Application.ApplicationHelpers.ImportApplication(
+				client: _rsapiClient,
+				workspaceId: _workspaceArtifactId,
+				forceFlag: true,
+				filePath: TestConstants.ApplicationRapFilePath,
+				applicationName: Helpers.Constants.Names.APPLICATION);
+
+			Console.WriteLine("End - Install Application in Workspace.");
 		}
 
 		private bool DoesWorkspaceExists(int workspaceArtifactId)

@@ -1,0 +1,27 @@
+using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using NUnit.Framework;
+using Relativity.API;
+using Relativity.Services.ServiceProxy;
+using Relativity.Test.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using UsernamePasswordCredentials = Relativity.Services.ServiceProxy.UsernamePasswordCredentials;
+
+namespace Agents.Tests.Integration
+{
+	[TestFixture]
+	[Description("Agent Tests")]
+	public class AgentTests
+	{
+		private ServiceFactory _serviceFactory;
+		private IServicesMgr _servicesManager;
+		private IRSAPIClient _rsapiClient;
+		private IDBContext _eddsDbContext;
+		private AgentUtility _agentUtility;
+		private TestHelper _testHelper;
+		private int _workspaceArtifactId;
+		
+	}
+}
