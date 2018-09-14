@@ -1,7 +1,7 @@
 ﻿using Relativity.Services.Agent;
 using System;
 
-namespace Agents.Tests.Integration.Utility
+namespace Agents.Tests.Integration
 {
 	public class TestConstants
 	{
@@ -27,7 +27,7 @@ namespace Agents.Tests.Integration.Utility
 		public const int AGENT_INTERVAL = 10;
 		public const Agent.LoggingLevelEnum AGENT_LOGGING_LEVEL = Agent.LoggingLevelEnum.All;
 		public const int WORKSPACE_CREATION_RETRY = 3;
-		public static readonly string ApplicationRapFilePath = @"S:\SourceCode\GitHub\ads-workshop-fest-2018\Projects\IntegrationTests\RAP\ADS_Workshop_Fest_2018.rap";
+		public static readonly string ApplicationRapFilePath = @"E:\Github\ads-workshop-fest-2018\Projects\Starting\4_IntegrationTests\RAP\ADS_Workshop_Fest_2018.rap";
 		public static readonly string WorkspaceName = "ADS" + "-" + Guid.NewGuid();
 	}
 }

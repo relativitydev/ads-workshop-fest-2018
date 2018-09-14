@@ -80,11 +80,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests\AgentTests.cs" />
-    <Compile Include="Utility\AgentUtility.cs" />
+    <Compile Include="AgentUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\TestConstants.cs" />
-    <Compile Include="Utility\UserUtility.cs" />
+    <Compile Include="TestConstants.cs" />
+    <Compile Include="UserUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

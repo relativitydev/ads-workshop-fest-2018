@@ -1,12 +1,12 @@
-﻿using AgentUtilities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AgentUtilities;
 using Relativity.API;
 using Relativity.Services.Agent;
 using Relativity.Services.ServiceProxy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Agents.Tests.Integration.Utility
+namespace Agents.Tests.Integration
 {
 	public class AgentUtility
 	{
