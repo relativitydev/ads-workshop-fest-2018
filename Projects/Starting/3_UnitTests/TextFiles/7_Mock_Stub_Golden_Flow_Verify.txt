@@ -1,0 +1,6 @@
+private void Verify_RdoRepository_Query_Works_Was_Called(int timesCalled)
+{
+	MockRdoRepository
+		.Verify(x => x.Query(It.IsAny<Query<RDO>>(), It.IsAny<int>())
+		, Times.Exactly(timesCalled));
+}

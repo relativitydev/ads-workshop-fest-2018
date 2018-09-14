@@ -1,0 +1,5 @@
+public Mock<IGenericRepository<RDO>> MockRdoRepository { get; set; }
+public Mock<IGenericRepository<Choice>> MockChoiceRepository { get; set; }
+public Mock<IGenericRepository<Workspace>> MockWorkspaceRepository { get; set; }
+public Mock<IGenericRepository<User>> MockUserRepository { get; set; }
+public Mock<IGenericRepository<Group>> MockGroupRepository { get; set; }

@@ -21,11 +21,11 @@ namespace Helpers.Tests.Unit
 		public Mock<IGenericRepository<User>> MockUserRepository { get; set; }
 		public Mock<IGenericRepository<Group>> MockGroupRepository { get; set; }
 
-		[SetUp]
-		public void Setup()
-		{
-			Console.WriteLine("Start - SetUp");
+		#region SetUp and TearDown
 
+		[SetUp]
+		public void SetUp()
+		{
 			MockRdoRepository = new Mock<IGenericRepository<RDO>>();
 			MockChoiceRepository = new Mock<IGenericRepository<Choice>>();
 			MockWorkspaceRepository = new Mock<IGenericRepository<Workspace>>();
@@ -43,7 +43,6 @@ namespace Helpers.Tests.Unit
 				workspaceRepository: MockWorkspaceRepository.Object,
 				userRepository: MockUserRepository.Object,
 				groupRepository: MockGroupRepository.Object);
-			Console.WriteLine("End - SetUp");
 		}
 
 		[TearDown]
@@ -57,12 +56,18 @@ namespace Helpers.Tests.Unit
 			Sut = null;
 		}
 
+		#endregion
+
+
 		#region TestConstants
 
 		private const int TestWorkspaceArtifactId = 123;
 		private const string TestStatus = "New";
 
 		#endregion
+
+
+		#region Tests
 
 		[Test]
 		public void RetrieveJobsInWorkspaceWithStatus_GoldenFlow()
@@ -92,6 +97,11 @@ namespace Helpers.Tests.Unit
 			StringAssert.Contains(Constants.ErrorMessages.QUERY_APPLICATION_JOBS_ERROR, exception.ToString());
 			Verify_RdoRepository_Query_Works_Was_Called(1);
 		}
+
+		#endregion
+
+
+		#region Mocks
 
 		private void Mock_RdoRepository_Query_Works(int rdoCount)
 		{
@@ -124,11 +134,18 @@ namespace Helpers.Tests.Unit
 				.Throws<Exception>();
 		}
 
+		#endregion
+
+
+		#region Verify
+
 		private void Verify_RdoRepository_Query_Works_Was_Called(int timesCalled)
 		{
 			MockRdoRepository
 				.Verify(x => x.Query(It.IsAny<Query<RDO>>(), It.IsAny<int>())
 				, Times.Exactly(timesCalled));
 		}
+
+		#endregion
 	}
 }

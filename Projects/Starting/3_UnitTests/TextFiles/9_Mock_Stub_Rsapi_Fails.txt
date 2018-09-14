@@ -1,0 +1,6 @@
+private void Mock_RdoRepository_Query_Throws_Exception()
+{
+	MockRdoRepository
+		.Setup(x => x.Query(It.IsAny<Query<RDO>>(), It.IsAny<int>()))
+		.Throws<Exception>();
+}

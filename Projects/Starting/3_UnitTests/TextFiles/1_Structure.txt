@@ -1,0 +1,41 @@
+using kCura.Relativity.Client;
+using kCura.Relativity.Client.DTOs;
+using kCura.Relativity.Client.Repositories;
+using Moq;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using Choice = kCura.Relativity.Client.DTOs.Choice;
+using User = kCura.Relativity.Client.DTOs.User;
+
+namespace Helpers.Tests.Unit
+{
+	[TestFixture]
+	[Description("Rsapi Helper Tests")]
+	public class RsapiHelperTests
+	{
+		#region SetUp and TearDown
+
+		#endregion
+		
+
+		#region TestConstants
+
+		#endregion
+		
+
+		#region Tests
+
+		#endregion
+		
+
+		#region Mocks
+
+		#endregion
+		
+
+		#region Verify
+
+		#endregion
+	}
+}

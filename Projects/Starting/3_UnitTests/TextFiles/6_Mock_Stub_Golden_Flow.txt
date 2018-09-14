@@ -1,0 +1,23 @@
+private void Mock_RdoRepository_Query_Works(int rdoCount)
+{
+	List<Result<RDO>> results = new List<Result<RDO>>();
+	for (int i = 1; i <= rdoCount; i++)
+	{
+		Result<RDO> newResult = new Result<RDO>
+		{
+			Artifact = new RDO(i),
+			Message = string.Empty,
+			Success = true
+		};
+		results.Add(newResult);
+	}
+	QueryResultSet<RDO> rdoQueryResultSet = new QueryResultSet<RDO>
+	{
+		Success = true,
+		Results = results
+	};
+
+	MockRdoRepository
+		.Setup(x => x.Query(It.IsAny<Query<RDO>>(), It.IsAny<int>()))
+		.Returns(rdoQueryResultSet);
+}

@@ -1,0 +1,13 @@
+[Test]
+public void RetrieveJobsInWorkspaceWithStatus_Rsapi_Fails()
+{
+	//Arrange
+	Mock_RdoRepository_Query_Throws_Exception();
+
+	//Act
+	Exception exception = Assert.Throws<Exception>(() => Sut.RetrieveJobsInWorkspaceWithStatus(TestWorkspaceArtifactId, TestStatus));
+
+	//Assert
+	StringAssert.Contains(Constants.ErrorMessages.QUERY_APPLICATION_JOBS_ERROR, exception.ToString());
+	Verify_RdoRepository_Query_Works_Was_Called(1);
+}

@@ -1,0 +1,2 @@
+private const int TestWorkspaceArtifactId = 123;
+private const string TestStatus = "New";

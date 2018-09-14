@@ -1,0 +1,14 @@
+[Test]
+public void RetrieveJobsInWorkspaceWithStatus_GoldenFlow()
+{
+	//Arrange
+	int rdoCount = 5;
+	Mock_RdoRepository_Query_Works(rdoCount);
+
+	//Act
+	List<int> jobsList = Sut.RetrieveJobsInWorkspaceWithStatus(TestWorkspaceArtifactId, TestStatus);
+
+	//Assert
+	Verify_RdoRepository_Query_Works_Was_Called(1);
+	Assert.That(jobsList.Count, Is.EqualTo(rdoCount));
+}
