@@ -38,10 +38,12 @@
       <HintPath>..\..\..\..\DLLs\AgentUtilities.dll</HintPath>
     </Reference>
     <Reference Include="DbContextHelper, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.DbContextHelper.2.0.0.2\lib\net462\DbContextHelper.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\DbContextHelper.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.Client, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.9.6.134.78\lib\kCura.Relativity.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
@@ -50,25 +52,31 @@
       <HintPath>..\..\..\..\DLLs\Relativity.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.API, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.9.6.134.78\lib\Relativity.API.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Kepler, Version=1.0.1.445, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.134.78\lib\Relativity.Kepler.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\Relativity.Kepler.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.DataContracts, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.134.78\lib\Relativity.Services.DataContracts.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\Relativity.Services.DataContracts.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.Interfaces, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.134.78\lib\Relativity.Services.Interfaces.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\Relativity.Services.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.Interfaces.Private">
       <HintPath>..\..\..\..\DLLs\Relativity.Services.Interfaces.Private.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Services.ServiceProxy, Version=1.0.1.392, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.ObjectManager.9.6.134.78\lib\Relativity.Services.ServiceProxy.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\Relativity.Services.ServiceProxy.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.Test.Helpers, Version=4.5.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RelativityDev.RelativityTestHelpers.4.5.0.1\lib\Relativity.Test.Helpers.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Starting\4_IntegrationTests\Project\packages\Relativity.Test.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
