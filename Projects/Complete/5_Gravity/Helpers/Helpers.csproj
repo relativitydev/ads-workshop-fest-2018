@@ -33,13 +33,15 @@
   <ItemGroup>
     <Reference Include="Gravity, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DLLs\Gravity\Gravity.dll</HintPath>
+      <HintPath>..\packages\Gravity.dll</HintPath>
     </Reference>
     <Reference Include="kCura.Relativity.Client, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Rsapi.9.6.134.78\lib\kCura.Relativity.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\kCura.Relativity.Client.dll</HintPath>
     </Reference>
     <Reference Include="Relativity.API, Version=9.6.134.78, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Relativity.Api.9.6.134.78\lib\Relativity.API.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Relativity.API.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,9 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RsapiHelper.cs" />
     <Compile Include="SqlHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,4 @@
-﻿using Helpers.DTOs;
-using kCura.Relativity.Client.DTOs;
+﻿using kCura.Relativity.Client.DTOs;
 using Relativity.API;
 using System;
 using System.Collections.Generic;
@@ -24,10 +23,10 @@ namespace Helpers
 			{
 				jobsList = RsapiHelper.RetrieveJobsInWorkspaceWithStatus(servicesMgr, workspaceArtifactId, status);
 			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				jobsList = GravityHelper.RetrieveJobsInWorkspaceWithStatus(servicesMgr, workspaceArtifactId, status);
-			}
+			//else if (_apiType.Equals(Constants.ApiType.Gravity))
+			//{
+
+			//}
 			else
 			{
 				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
@@ -39,7 +38,7 @@ namespace Helpers
 		public RDO RetrieveJob(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
 		{
 			RDO jobRdo = null;
-			
+
 			jobRdo = RsapiHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
 
 			return jobRdo;
@@ -48,7 +47,7 @@ namespace Helpers
 		public InstanceMetricsJobObj RetrieveJobWithGravity(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
 		{
 			InstanceMetricsJobObj jobRdo = null;
-			
+
 			jobRdo = GravityHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
 
 			return jobRdo;
@@ -60,10 +59,10 @@ namespace Helpers
 			{
 				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, fieldGuid, fieldValue);
 			}
-			else if (_apiType.Equals(Constants.ApiType.Gravity))
-			{
-				GravityHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, fieldGuid, fieldValue);
-			}
+			//else if (_apiType.Equals(Constants.ApiType.Gravity))
+			//{
+
+			//}
 			else
 			{
 				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
@@ -75,14 +74,14 @@ namespace Helpers
 			Choice metricChoice = null;
 
 			metricChoice = RsapiHelper.RetrieveMetricChoice(servicesMgr, workspaceArtifactId, choiceArtifactId);
-			
+
 			return metricChoice;
 		}
 
 		public int QueryNumberOfWorkspaces(IServicesMgr servicesMgr)
 		{
 			int numberOfWorkspaces;
-			
+
 			numberOfWorkspaces = RsapiHelper.QueryNumberOfWorkspaces(servicesMgr);
 
 			return numberOfWorkspaces;
@@ -100,7 +99,7 @@ namespace Helpers
 		public int QueryNumberOfGroups(IServicesMgr servicesMgr)
 		{
 			int numberOfGroups;
-			
+
 			numberOfGroups = RsapiHelper.QueryNumberOfGroups(servicesMgr);
 
 			return numberOfGroups;
