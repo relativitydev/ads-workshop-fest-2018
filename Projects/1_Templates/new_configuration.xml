@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ConfigurationFile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <custompages />
+  <resourceFilesList>
+    <string>S:\SourceCode\GitHub\ads-workshop-fest-2018\CompleteProject\Agents\bin\Debug\Agents.dll</string>
+    <string>S:\SourceCode\GitHub\ads-workshop-fest-2018\CompleteProject\Helpers\bin\Debug\Helpers.dll</string>
+    <string>S:\SourceCode\GitHub\ads-workshop-fest-2018\CompleteProject\EventHandlers\bin\Debug\EventHandlers.dll</string>
+    <string>S:\SourceCode\GitHub\ads-workshop-fest-2018\CompleteProject\Agents\bin\Debug\Agents.pdb</string>
+  </resourceFilesList>
+  <name>AdsWorkshopFest2018</name>
+  <destinationPath />
+  <webURLServer>http://192.168.137.95/Relativity.Services</webURLServer>
+  <dbCaseServer>192.168.137.95</dbCaseServer>
+  <dbCaseUserName>eddsdbo</dbCaseUserName>
+  <dbCaseUserPassword>mJ00pLuKJ3YQM7adAla/HA==</dbCaseUserPassword>
+  <caseUserName>relativity.admin@relativity.com</caseUserName>
+  <applicationSchema />
+  <applicationVersion>...</applicationVersion>
+  <applicationGuid>5bfe392e-2d1a-4023-be44-4098c48e6976</applicationGuid>
+  <caseGuid>ab26348a-1276-4174-89da-43ebb5ab2c7a</caseGuid>
+</ConfigurationFile>
