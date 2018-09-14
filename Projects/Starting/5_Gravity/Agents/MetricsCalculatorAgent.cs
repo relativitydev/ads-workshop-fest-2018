@@ -94,10 +94,7 @@ namespace Agents
 				}
 				else if(selectedApiType == Helpers.Constants.ApiType.Gravity)
 				{
-					InstanceMetricsJobObj jobRdo = _apiChooser.RetrieveJobWithGravity(servicesMgr, workspaceArtifactId, jobArtifactId);
-					RaiseMessage("Calculating metrics for the job", 10);
-					ProcessAllMetrics(servicesMgr, workspaceArtifactId, jobArtifactId, jobRdo);
-					RaiseMessage("Calculated metrics for the job", 10);
+					
 				}
 
 				//Update job status to Completed
@@ -122,23 +119,6 @@ namespace Agents
 
 				foreach (Guid metricGuid in metricGuidsToCollect)
 				{
-					ProcessSingleMetric(servicesMgr, workspaceArtifactId, jobArtifactId, metricGuid);
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new Exception(Constants.ErrorMessages.PROCESS_ALL_JOB_METRICS_ERROR, ex);
-			}
-		}
-
-		private void ProcessAllMetrics(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId, InstanceMetricsJobObj jobRdo)
-		{
-			try
-			{
-				foreach (MetricsChoices metric in jobRdo.Metrics)
-				{
-					Guid metricGuid = metric.GetRelativityObjectAttributeGuidValue();
-
 					ProcessSingleMetric(servicesMgr, workspaceArtifactId, jobArtifactId, metricGuid);
 				}
 			}

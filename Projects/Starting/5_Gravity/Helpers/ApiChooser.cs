@@ -23,10 +23,10 @@ namespace Helpers
 			{
 				jobsList = RsapiHelper.RetrieveJobsInWorkspaceWithStatus(servicesMgr, workspaceArtifactId, status);
 			}
-			//else if (_apiType.Equals(Constants.ApiType.Gravity))
-			//{
-
-			//}
+			else if (_apiType.Equals(Constants.ApiType.Gravity))
+			{
+				jobsList = new List<int>();
+			}
 			else
 			{
 				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
@@ -44,25 +44,16 @@ namespace Helpers
 			return jobRdo;
 		}
 
-		public InstanceMetricsJobObj RetrieveJobWithGravity(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId)
-		{
-			InstanceMetricsJobObj jobRdo = null;
-
-			jobRdo = GravityHelper.RetrieveJob(servicesMgr, workspaceArtifactId, jobArtifactId);
-
-			return jobRdo;
-		}
-
 		public void UpdateJobField(IServicesMgr servicesMgr, int workspaceArtifactId, int jobArtifactId, Guid fieldGuid, object fieldValue)
 		{
 			if (_apiType.Equals(Constants.ApiType.Rsapi))
 			{
 				RsapiHelper.UpdateJobField(servicesMgr, workspaceArtifactId, jobArtifactId, fieldGuid, fieldValue);
 			}
-			//else if (_apiType.Equals(Constants.ApiType.Gravity))
-			//{
+			else if (_apiType.Equals(Constants.ApiType.Gravity))
+			{
 
-			//}
+			}
 			else
 			{
 				throw new Exception(Constants.ErrorMessages.INVALID_API_TYPE_ERROR);
