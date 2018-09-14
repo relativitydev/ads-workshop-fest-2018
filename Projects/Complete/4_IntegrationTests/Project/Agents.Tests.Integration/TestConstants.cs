@@ -1,7 +1,7 @@
 ﻿using Relativity.Services.Agent;
 using System;
 
-namespace Agents.Tests.Integration.Utility
+namespace Agents.Tests.Integration
 {
 	public class TestConstants
 	{
